@@ -326,7 +326,7 @@
           <div class="row">
             <label>
               시작 시간 설정
-              <input id="startTimeInput" type="time" value="09:00">
+              <input id="startTimeInput" type="time" value="08:30">
             </label>
             <label>
               시간 속도
@@ -341,6 +341,7 @@
           </div>
 
           <button id="startCustomBtn" type="button">설정한 시간부터 시작</button>
+          <button id="realTimeBtn" type="button">실제 시간으로 보기</button>
 
           <div class="row">
             <label>
@@ -409,6 +410,8 @@
       { time: "16:05", bell: "bell4", label: "7교시 종료 종" }
     ];
 
+    const dayStartTime = "08:30";
+
     const lessonSchedule = [
       { start: "09:00", end: "09:45", index: 1 },
       { start: "09:55", end: "10:40", index: 2 },
@@ -459,6 +462,7 @@
       startTimeInput: document.getElementById("startTimeInput"),
       speedSelect: document.getElementById("speedSelect"),
       startCustomBtn: document.getElementById("startCustomBtn"),
+      realTimeBtn: document.getElementById("realTimeBtn"),
       testBellSelect: document.getElementById("testBellSelect"),
       volumeInput: document.getElementById("volumeInput"),
       testBellBtn: document.getElementById("testBellBtn"),
@@ -557,11 +561,19 @@
     function updateBadges() {
       els.audioBadge.textContent = state.audioUnlocked ? "종소리 허용됨" : "종소리 잠김";
       els.audioBadge.className = `badge ${state.audioUnlocked ? "ok" : "warn"}`;
-      els.modeBadge.textContent = state.useVirtualTime ? `설정 시간 ${state.speed}배속` : "실제 시간";
+      els.modeBadge.textContent = state.useVirtualTime ? `시간표 진행 ${state.speed}배속` : "실제 시간";
       els.pauseBtn.textContent = state.paused ? "다시 시작" : "일시정지";
     }
 
     function getStatus(timeStr) {
+      const currentEvent = bellEvents.find(event => event.time === timeStr);
+      if (currentEvent) {
+        return `${currentEvent.label} 울림`;
+      }
+
+      if (timeStr >= "16:05") return "오늘 수업 종료";
+      if (timeStr >= "12:30" && timeStr < "13:30") return "점심시간";
+
       for (let i = 0; i < lessonSchedule.length; i += 1) {
         const lesson = lessonSchedule[i];
         const prevBell = minutesToTime(timeToMinutes(lesson.start) - 5);
@@ -581,8 +593,6 @@
       }
 
       if (timeStr < "09:00") return "등교 및 수업 준비 시간";
-      if (timeStr >= "12:30" && timeStr < "13:30") return "점심시간";
-      if (timeStr >= "16:05") return "오늘 수업 종료";
       return "수업 외 시간";
     }
 
@@ -640,11 +650,16 @@
       state.paused = false;
       state.virtualStartMinutes = timeToMinutes(time);
       state.realStartMs = Date.now();
+      state.played = {};
       state.lastMinute = "";
       update();
     }
 
     function startFromNow() {
+      startFromTime(dayStartTime);
+    }
+
+    function showRealTime() {
       state.useVirtualTime = false;
       state.paused = false;
       state.lastMinute = "";
@@ -664,7 +679,8 @@
 
     els.unlockBtn.addEventListener("click", unlockBell);
     els.startNowBtn.addEventListener("click", startFromNow);
-    els.startCustomBtn.addEventListener("click", () => startFromTime(els.startTimeInput.value || "09:00"));
+    els.startCustomBtn.addEventListener("click", () => startFromTime(els.startTimeInput.value || dayStartTime));
+    els.realTimeBtn.addEventListener("click", showRealTime);
     els.pauseBtn.addEventListener("click", togglePause);
     els.resetBtn.addEventListener("click", () => {
       state.played = {};
