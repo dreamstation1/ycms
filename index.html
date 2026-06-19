@@ -2,98 +2,412 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>학교 종소리 (MP4)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>양청중학교 종소리</title>
   <style>
-    body {
-      font-family: monospace;
-      background-color: white;
-      text-align: center;
-      padding-top: 30px;
+    :root {
+      color-scheme: light;
+      --ink: #151515;
+      --muted: #666;
+      --line: #d8d8d8;
+      --panel: #f7f7f7;
+      --accent: #2457ff;
+      --accent-dark: #1539ad;
+      --warn: #b45309;
+      --ok: #0f766e;
     }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Pretendard", "Malgun Gothic", Arial, sans-serif;
+      background: #fff;
+      color: var(--ink);
+    }
+
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 40px;
+    }
+
+    header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 2px solid var(--ink);
+      padding-bottom: 16px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(24px, 4vw, 44px);
+      letter-spacing: 0;
+    }
+
+    .clock-wrap {
+      display: grid;
+      gap: 12px;
+      justify-items: center;
+      padding: 18px 0 12px;
+    }
+
     #clock {
-      font-size: 32px;
+      width: 100%;
+      min-height: 136px;
+      overflow-x: auto;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: clamp(20px, 5vw, 42px);
       line-height: 1.05;
       white-space: pre;
-      font-weight: bold;
-      margin-bottom: 20px;
+      font-weight: 700;
+      text-align: center;
     }
+
     .dot {
-      color: #ccc;
-      font-size: 18px;
+      color: #d4d4d4;
     }
+
     .dot.on {
-      color: blue;
+      color: var(--accent);
     }
+
     #status {
-      font-size: 36px;
-      font-weight: bold;
-      margin: 10px;
-      background: linear-gradient(270deg, red, orange, yellow, green, blue, indigo, violet);
-      background-size: 1000% 1000%;
+      min-height: 44px;
+      font-size: clamp(22px, 4vw, 38px);
+      font-weight: 800;
+      text-align: center;
+      background: linear-gradient(90deg, #e11d48, #f97316, #0f766e, #2563eb, #7c3aed);
+      background-size: 500% 100%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      animation: rainbowText 5s linear infinite;
+      animation: rainbowText 8s linear infinite;
     }
+
     @keyframes rainbowText {
       0% { background-position: 0% 50%; }
       100% { background-position: 100% 50%; }
     }
-    .highlight {
-      font-weight: bold;
+
+    .top-state {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 4px 10px;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 999px;
+      color: var(--ink);
+    }
+
+    .badge.ok {
+      color: var(--ok);
+      border-color: #99d6ce;
+    }
+
+    .badge.warn {
+      color: var(--warn);
+      border-color: #f4c48a;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 360px;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      padding: 14px;
+    }
+
+    .panel h2 {
+      margin: 0 0 12px;
+      font-size: 18px;
+    }
+
+    .controls {
+      display: grid;
+      gap: 12px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    label {
+      display: grid;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 700;
+      text-align: left;
+    }
+
+    input,
+    select,
+    button {
+      min-height: 42px;
+      border-radius: 6px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      font: inherit;
+    }
+
+    input,
+    select {
+      padding: 0 10px;
+    }
+
+    button {
+      cursor: pointer;
+      font-weight: 800;
+      padding: 0 12px;
+    }
+
+    button.primary {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    button.primary:hover {
+      background: var(--accent-dark);
+    }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .wide {
+      grid-column: 1 / -1;
+    }
+
+    .schedule {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+
+    .schedule th,
+    .schedule td {
+      padding: 9px 10px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+    }
+
+    .schedule th {
+      background: #efefef;
+      font-size: 13px;
+    }
+
+    .schedule tr.active {
+      background: #e8f0ff;
+      font-weight: 800;
+    }
+
+    .schedule tr.next {
+      outline: 2px solid var(--accent);
+      outline-offset: -2px;
+    }
+
+    .hint {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+      text-align: left;
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 42px;
+      text-align: left;
+      font-weight: 700;
+    }
+
+    .toggle-row input {
+      width: 18px;
+      height: 18px;
+      min-height: auto;
+    }
+
+    @media (max-width: 840px) {
+      header,
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      header {
+        display: block;
+      }
+
+      .layout {
+        display: grid;
+      }
+
+      .row {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>YANGCHUNG_MIDDLE_SCHOOL_BELL</h1>
-  <p>👇 아래 버튼을 한 번 눌러야 자동 재생이 작동해요.</p>
-  <button onclick="unlockBell()">🔓 종소리 활성화</button>
+  <main>
+    <header>
+      <div>
+        <h1>YANGCHUNG MIDDLE SCHOOL BELL</h1>
+        <p class="hint">종소리 허용을 한 번 누른 뒤, 실제 시간 또는 원하는 시작 시간으로 자동 종을 울릴 수 있어요.</p>
+      </div>
+      <div class="top-state">
+        <span id="audioBadge" class="badge warn">종소리 잠김</span>
+        <span id="modeBadge" class="badge">실제 시간</span>
+      </div>
+    </header>
 
-  <div id="clock">--:--</div>
-  <div id="status"></div>
+    <section class="clock-wrap" aria-label="현재 시간과 상태">
+      <div id="clock">--:--</div>
+      <div id="status">준비 중</div>
+      <div id="nextBell" class="top-state"></div>
+    </section>
 
-  <video id="bell1" src="bell1.mp4" style="display:none"></video>
-  <video id="bell2" src="bell2.mp4" style="display:none"></video>
-  <video id="bell3" src="bell3.mp4" style="display:none"></video>
-  <video id="bell4" src="bell4.mp4" style="display:none"></video>
-  <audio id="bell5" src="bell5.mp4" style="display:none"></audio>
+    <section class="layout">
+      <div class="panel">
+        <h2>오늘 시간표</h2>
+        <table class="schedule">
+          <thead>
+            <tr>
+              <th>교시</th>
+              <th>예비종</th>
+              <th>수업</th>
+              <th>종료</th>
+            </tr>
+          </thead>
+          <tbody id="scheduleBody"></tbody>
+        </table>
+      </div>
+
+      <aside class="panel">
+        <h2>조작</h2>
+        <div class="controls">
+          <button class="primary wide" id="unlockBtn" type="button">종소리 허용</button>
+
+          <div class="row">
+            <button id="startNowBtn" type="button">지금부터 시작</button>
+            <button id="pauseBtn" type="button">일시정지</button>
+          </div>
+
+          <div class="row">
+            <label>
+              시작 시간 설정
+              <input id="startTimeInput" type="time" value="09:00">
+            </label>
+            <label>
+              시간 속도
+              <select id="speedSelect">
+                <option value="1">1배속</option>
+                <option value="5">5배속</option>
+                <option value="10">10배속</option>
+                <option value="30">30배속</option>
+                <option value="60">60배속</option>
+              </select>
+            </label>
+          </div>
+
+          <button id="startCustomBtn" type="button">설정한 시간부터 시작</button>
+
+          <div class="row">
+            <label>
+              테스트 종
+              <select id="testBellSelect">
+                <option value="bell1">bell1 - 등교</option>
+                <option value="bell2">bell2 - 준비</option>
+                <option value="bell3">bell3 - 시작</option>
+                <option value="bell4">bell4 - 종료</option>
+                <option value="bell5">bell5 - 예비</option>
+              </select>
+            </label>
+            <label>
+              볼륨
+              <input id="volumeInput" type="range" min="0" max="100" value="100">
+            </label>
+          </div>
+
+          <div class="row">
+            <button id="testBellBtn" type="button">테스트 재생</button>
+            <button id="resetBtn" type="button">울림 기록 초기화</button>
+          </div>
+
+          <label class="toggle-row wide">
+            <input id="muteCheck" type="checkbox">
+            무음 모드
+          </label>
+
+          <p class="hint">브라우저 정책 때문에 자동 재생 전에 반드시 “종소리 허용”을 한 번 눌러야 해요. 시간이 이미 지나간 종은 울림 기록 초기화 후 다시 테스트할 수 있어요.</p>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <video id="bell1" src="bell1.mp4" preload="auto" playsinline style="display:none"></video>
+  <video id="bell2" src="bell2.mp4" preload="auto" playsinline style="display:none"></video>
+  <video id="bell3" src="bell3.mp4" preload="auto" playsinline style="display:none"></video>
+  <video id="bell4" src="bell4.mp4" preload="auto" playsinline style="display:none"></video>
+  <audio id="bell5" src="bell5.mp4" preload="auto" style="display:none"></audio>
 
   <script>
-    const schedule = {
-      "08:30": "bell1", "08:40": "bell2", "08:50": "bell4",
-      "09:00": "bell3", "09:45": "bell4", "09:55": "bell3",
-      "10:40": "bell4", "10:50": "bell3", "11:35": "bell4",
-      "11:45": "bell3", "12:30": "bell4", "13:30": "bell3",
-      "14:15": "bell4", "14:25": "bell3", "15:10": "bell4",
-      "15:20": "bell3", "16:05": "bell4",
-      "08:55": "bell5", "09:50": "bell5", "10:45": "bell5",
-      "11:40": "bell5", "13:25": "bell5", "14:20": "bell5",
-      "15:15": "bell5", 
-  "21:30": "bell1",
-  "21:40": "bell2",
-  "21:50": "bell4",
-  "22:00": "bell3",
-  "22:45": "bell4",
-  "22:55": "bell3",
-  "23:40": "bell4",
-  "23:50": "bell3",
-  "00:35": "bell4",
-  "00:45": "bell3",
-  "01:30": "bell4",
-  "02:30": "bell3",
-  "03:15": "bell4",
-  "03:25": "bell3",
-  "04:10": "bell4",
-  "04:20": "bell3",
-  "05:05": "bell4",
-  "21:55": "bell5",
-  "22:50": "bell5",
-  "23:45": "bell5",
-  "00:40": "bell5",
-  "02:25": "bell5",
-  "03:20": "bell5",
-  "04:15": "bell5"
-
-    };
+    const bellEvents = [
+      { time: "08:30", bell: "bell1", label: "등교 종" },
+      { time: "08:40", bell: "bell2", label: "준비 종" },
+      { time: "08:50", bell: "bell4", label: "아침 종료 종" },
+      { time: "08:55", bell: "bell5", label: "1교시 예비 종" },
+      { time: "09:00", bell: "bell3", label: "1교시 시작 종" },
+      { time: "09:45", bell: "bell4", label: "1교시 종료 종" },
+      { time: "09:50", bell: "bell5", label: "2교시 예비 종" },
+      { time: "09:55", bell: "bell3", label: "2교시 시작 종" },
+      { time: "10:40", bell: "bell4", label: "2교시 종료 종" },
+      { time: "10:45", bell: "bell5", label: "3교시 예비 종" },
+      { time: "10:50", bell: "bell3", label: "3교시 시작 종" },
+      { time: "11:35", bell: "bell4", label: "3교시 종료 종" },
+      { time: "11:40", bell: "bell5", label: "4교시 예비 종" },
+      { time: "11:45", bell: "bell3", label: "4교시 시작 종" },
+      { time: "12:30", bell: "bell4", label: "4교시 종료 종" },
+      { time: "13:25", bell: "bell5", label: "5교시 예비 종" },
+      { time: "13:30", bell: "bell3", label: "5교시 시작 종" },
+      { time: "14:15", bell: "bell4", label: "5교시 종료 종" },
+      { time: "14:20", bell: "bell5", label: "6교시 예비 종" },
+      { time: "14:25", bell: "bell3", label: "6교시 시작 종" },
+      { time: "15:10", bell: "bell4", label: "6교시 종료 종" },
+      { time: "15:15", bell: "bell5", label: "7교시 예비 종" },
+      { time: "15:20", bell: "bell3", label: "7교시 시작 종" },
+      { time: "16:05", bell: "bell4", label: "7교시 종료 종" }
+    ];
 
     const lessonSchedule = [
       { start: "09:00", end: "09:45", index: 1 },
@@ -104,34 +418,6 @@
       { start: "14:25", end: "15:10", index: 6 },
       { start: "15:20", end: "16:05", index: 7 }
     ];
-
-    let played = {};
-    let audioUnlocked = false;
-
-    function unlockBell() {
-      for (let i = 1; i <= 5; i++) {
-        const bell = document.getElementById(`bell${i}`);
-        if (bell) {
-          bell.volume = 0;
-          bell.play().then(() => {
-            bell.pause();
-            bell.currentTime = 0;
-            bell.volume = 1;
-          }).catch(err => {
-            console.log("🔒 초기 재생 실패:", err);
-          });
-        }
-      }
-      audioUnlocked = true;
-      alert("✅ 종소리 활성화 완료!");
-    }
-
-    function isFiveMinutesBefore(target, current) {
-      const [th, tm] = target.split(":"), [ch, cm] = current.split(":");
-      const targetMin = parseInt(th) * 60 + parseInt(tm);
-      const currentMin = parseInt(ch) * 60 + parseInt(cm);
-      return targetMin - currentMin === 5;
-    }
 
     const dotDigits = {
       "0": [".XXX.", "X...X", "X...X", "X...X", ".XXX."],
@@ -147,58 +433,269 @@
       ":": [".....", "..X..", ".....", "..X..", "....."]
     };
 
-    function drawDotClock(timeStr) {
-      const chars = timeStr.split("");
-      const lines = Array(5).fill("").map(() => []);
+    const state = {
+      audioUnlocked: false,
+      paused: false,
+      useVirtualTime: false,
+      virtualStartMinutes: 0,
+      realStartMs: Date.now(),
+      played: {},
+      lastMinute: "",
+      volume: 1,
+      muted: false,
+      speed: 1
+    };
 
-      chars.forEach(char => {
-        const dots = dotDigits[char];
-        dots.forEach((line, i) => {
-          for (let c of line) {
-            lines[i].push(`<span class='dot${c === 'X' ? " on" : ""}'>●</span>`);
+    const els = {
+      clock: document.getElementById("clock"),
+      status: document.getElementById("status"),
+      nextBell: document.getElementById("nextBell"),
+      scheduleBody: document.getElementById("scheduleBody"),
+      audioBadge: document.getElementById("audioBadge"),
+      modeBadge: document.getElementById("modeBadge"),
+      unlockBtn: document.getElementById("unlockBtn"),
+      startNowBtn: document.getElementById("startNowBtn"),
+      pauseBtn: document.getElementById("pauseBtn"),
+      startTimeInput: document.getElementById("startTimeInput"),
+      speedSelect: document.getElementById("speedSelect"),
+      startCustomBtn: document.getElementById("startCustomBtn"),
+      testBellSelect: document.getElementById("testBellSelect"),
+      volumeInput: document.getElementById("volumeInput"),
+      testBellBtn: document.getElementById("testBellBtn"),
+      resetBtn: document.getElementById("resetBtn"),
+      muteCheck: document.getElementById("muteCheck")
+    };
+
+    function timeToMinutes(time) {
+      const [h, m] = time.split(":").map(Number);
+      return h * 60 + m;
+    }
+
+    function minutesToTime(totalMinutes) {
+      const minutesInDay = 24 * 60;
+      const normalized = ((Math.floor(totalMinutes) % minutesInDay) + minutesInDay) % minutesInDay;
+      const h = String(Math.floor(normalized / 60)).padStart(2, "0");
+      const m = String(normalized % 60).padStart(2, "0");
+      return `${h}:${m}`;
+    }
+
+    function getCurrentMinutes() {
+      if (!state.useVirtualTime) {
+        const now = new Date();
+        return now.getHours() * 60 + now.getMinutes();
+      }
+
+      if (state.paused) {
+        return state.virtualStartMinutes;
+      }
+
+      const elapsedMinutes = ((Date.now() - state.realStartMs) / 60000) * state.speed;
+      return state.virtualStartMinutes + elapsedMinutes;
+    }
+
+    function drawDotClock(timeStr) {
+      const lines = Array.from({ length: 5 }, () => []);
+
+      timeStr.split("").forEach(char => {
+        dotDigits[char].forEach((line, i) => {
+          for (const c of line) {
+            lines[i].push(`<span class="dot${c === "X" ? " on" : ""}">●</span>`);
           }
+          lines[i].push(" ");
         });
       });
 
-      return lines.map(l => l.join("")).join("\n");
+      return lines.map(line => line.join("")).join("\n");
     }
 
-    setInterval(() => {
-      const realNow = new Date();
-      const showH = String(realNow.getHours()).padStart(2, '0');
-      const showM = String(realNow.getMinutes()).padStart(2, '0');
-      document.getElementById("clock").innerHTML = drawDotClock(`${showH}:${showM}`);
+    function getBell(id) {
+      return document.getElementById(id);
+    }
 
-      const now = new Date();
-      now.setSeconds(now.getSeconds() + 1.5);  // ⏰ 6초 일찍 울리기용 시계
-      const h = String(now.getHours()).padStart(2, '0');
-      const m = String(now.getMinutes()).padStart(2, '0');
-      const timeStr = `${h}:${m}`;
-
-      if (audioUnlocked && schedule[timeStr] && !played[timeStr]) {
-        const bell = document.getElementById(schedule[timeStr]);
-        bell.currentTime = 0;
-        bell.play().catch(err => console.log("⛔ 재생 실패:", err));
-        played[timeStr] = true;
+    function applyVolume() {
+      for (let i = 1; i <= 5; i += 1) {
+        const bell = getBell(`bell${i}`);
+        if (bell) {
+          bell.volume = state.muted ? 0 : state.volume;
+        }
       }
+    }
 
-      let status = "수업 외 시간";
-      for (const lesson of lessonSchedule) {
-        if (timeStr >= lesson.start && timeStr < lesson.end) {
-          status = `${lesson.index}교시 수업 중 (bell3)`;
-          break;
-        } else if (isFiveMinutesBefore(lesson.start, timeStr)) {
-          status = `${lesson.index}교시 5분 전 알림 (bell5)`;
-          break;
-        } else if (timeStr >= lesson.end && (!lessonSchedule[lesson.index] || timeStr < lessonSchedule[lesson.index].start)) {
-          status = `${lesson.index}교시 끝난 후 쉬는 시간 (bell4)`;
-          break;
+    async function unlockBell() {
+      const bells = ["bell1", "bell2", "bell3", "bell4", "bell5"].map(getBell);
+      applyVolume();
+
+      for (const bell of bells) {
+        if (!bell) continue;
+        const originalVolume = bell.volume;
+        try {
+          bell.volume = 0;
+          await bell.play();
+          bell.pause();
+          bell.currentTime = 0;
+          bell.volume = originalVolume;
+        } catch (err) {
+          console.log("초기 재생 실패:", err);
         }
       }
 
-      document.getElementById("status").innerHTML = status;
-    }, 1000);
+      state.audioUnlocked = true;
+      updateBadges();
+    }
+
+    function playBell(id) {
+      if (!state.audioUnlocked || state.muted) return;
+      const bell = getBell(id);
+      if (!bell) return;
+
+      bell.pause();
+      bell.currentTime = 0;
+      applyVolume();
+      bell.play().catch(err => console.log("재생 실패:", err));
+    }
+
+    function updateBadges() {
+      els.audioBadge.textContent = state.audioUnlocked ? "종소리 허용됨" : "종소리 잠김";
+      els.audioBadge.className = `badge ${state.audioUnlocked ? "ok" : "warn"}`;
+      els.modeBadge.textContent = state.useVirtualTime ? `설정 시간 ${state.speed}배속` : "실제 시간";
+      els.pauseBtn.textContent = state.paused ? "다시 시작" : "일시정지";
+    }
+
+    function getStatus(timeStr) {
+      for (let i = 0; i < lessonSchedule.length; i += 1) {
+        const lesson = lessonSchedule[i];
+        const prevBell = minutesToTime(timeToMinutes(lesson.start) - 5);
+        const nextLesson = lessonSchedule[i + 1];
+
+        if (timeStr === prevBell) {
+          return `${lesson.index}교시 5분 전 예비종`;
+        }
+
+        if (timeStr >= lesson.start && timeStr < lesson.end) {
+          return `${lesson.index}교시 수업 중`;
+        }
+
+        if (timeStr >= lesson.end && (!nextLesson || timeStr < nextLesson.start)) {
+          return `${lesson.index}교시 종료 후 쉬는 시간`;
+        }
+      }
+
+      if (timeStr < "09:00") return "등교 및 수업 준비 시간";
+      if (timeStr >= "12:30" && timeStr < "13:30") return "점심시간";
+      if (timeStr >= "16:05") return "오늘 수업 종료";
+      return "수업 외 시간";
+    }
+
+    function getNextEvent(currentMinutes) {
+      const todayMinute = Math.floor(currentMinutes) % (24 * 60);
+      const sorted = [...bellEvents].sort((a, b) => timeToMinutes(a.time) - timeToMinutes(b.time));
+      return sorted.find(event => timeToMinutes(event.time) > todayMinute) || sorted[0];
+    }
+
+    function renderSchedule(currentTime) {
+      const nextEvent = getNextEvent(getCurrentMinutes());
+
+      els.scheduleBody.innerHTML = lessonSchedule.map(lesson => {
+        const pre = minutesToTime(timeToMinutes(lesson.start) - 5);
+        const active = currentTime >= lesson.start && currentTime < lesson.end;
+        const isNext = [pre, lesson.start, lesson.end].includes(nextEvent.time);
+        return `
+          <tr class="${active ? "active" : ""} ${isNext ? "next" : ""}">
+            <td>${lesson.index}교시</td>
+            <td>${pre}</td>
+            <td>${lesson.start} ~ ${lesson.end}</td>
+            <td>${lesson.end}</td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function update() {
+      const currentMinutes = getCurrentMinutes();
+      const timeStr = minutesToTime(currentMinutes);
+
+      els.clock.innerHTML = drawDotClock(timeStr);
+      els.status.textContent = getStatus(timeStr);
+
+      const nextEvent = getNextEvent(currentMinutes);
+      els.nextBell.innerHTML = `<span class="badge">다음 종 ${nextEvent.time}</span><span>${nextEvent.label} (${nextEvent.bell})</span>`;
+
+      if (!state.paused && timeStr !== state.lastMinute) {
+        const eventsNow = bellEvents.filter(event => event.time === timeStr);
+        eventsNow.forEach(event => {
+          if (!state.played[event.time]) {
+            playBell(event.bell);
+            state.played[event.time] = true;
+          }
+        });
+        state.lastMinute = timeStr;
+      }
+
+      renderSchedule(timeStr);
+      updateBadges();
+    }
+
+    function startFromTime(time) {
+      state.useVirtualTime = true;
+      state.paused = false;
+      state.virtualStartMinutes = timeToMinutes(time);
+      state.realStartMs = Date.now();
+      state.lastMinute = "";
+      update();
+    }
+
+    function startFromNow() {
+      state.useVirtualTime = false;
+      state.paused = false;
+      state.lastMinute = "";
+      update();
+    }
+
+    function togglePause() {
+      if (!state.paused) {
+        state.virtualStartMinutes = getCurrentMinutes();
+        state.paused = true;
+      } else {
+        state.realStartMs = Date.now();
+        state.paused = false;
+      }
+      update();
+    }
+
+    els.unlockBtn.addEventListener("click", unlockBell);
+    els.startNowBtn.addEventListener("click", startFromNow);
+    els.startCustomBtn.addEventListener("click", () => startFromTime(els.startTimeInput.value || "09:00"));
+    els.pauseBtn.addEventListener("click", togglePause);
+    els.resetBtn.addEventListener("click", () => {
+      state.played = {};
+      state.lastMinute = "";
+      update();
+    });
+    els.testBellBtn.addEventListener("click", () => {
+      if (!state.audioUnlocked) {
+        unlockBell().then(() => playBell(els.testBellSelect.value));
+        return;
+      }
+      playBell(els.testBellSelect.value);
+    });
+    els.volumeInput.addEventListener("input", () => {
+      state.volume = Number(els.volumeInput.value) / 100;
+      applyVolume();
+    });
+    els.muteCheck.addEventListener("change", () => {
+      state.muted = els.muteCheck.checked;
+      applyVolume();
+    });
+    els.speedSelect.addEventListener("change", () => {
+      state.virtualStartMinutes = getCurrentMinutes();
+      state.realStartMs = Date.now();
+      state.speed = Number(els.speedSelect.value);
+      update();
+    });
+
+    renderSchedule("--:--");
+    update();
+    setInterval(update, 1000);
   </script>
 </body>
 </html>
-
